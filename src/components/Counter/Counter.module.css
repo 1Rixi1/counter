@@ -1,0 +1,31 @@
+.wrapperCounter {
+  width: 320px;
+  max-width: 100%;
+  border: 1px solid #69acf6;
+  padding: 10px;
+}
+
+.wrapperShowMessage {
+  text-align: center;
+  margin-bottom: 10px;
+  border: 1px solid #69acf6;
+  padding: 10px;
+}
+
+.showMessage {
+  color: #69acf6;
+  margin: 0;
+  font-weight: 800;
+}
+
+.limitNumberMessage {
+  color: red;
+}
+
+.wrapperButtons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #69acf6;
+  padding: 10px;
+}
