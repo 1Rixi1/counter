@@ -2,25 +2,28 @@ import React, { MutableRefObject, useEffect, useState } from "react";
 
 import s from "./Counter.module.css";
 import Button from "../Button/Button";
+import { useLocalValue } from "../../useLocalValue/useLocalValue";
 
 type CounterPropsType = {
-  value: number;
   maxValue: number;
   error: string;
-  // preMessage: { text: string };
   preMessage: string;
-  setValue: (value: number) => void;
-  // staticValueRef: MutableRefObject< number | null>;
 };
 export const Counter: React.FC<CounterPropsType> = (props) => {
-  const { value, maxValue, error, preMessage, setValue } = props;
+  const { maxValue, error, preMessage } = props;
+
+  const [currentValue, setCurrentValue] = useLocalValue("value", 0);
+
+  useEffect(() => {
+    setCurrentValue(localStorage.getItem("value"));
+  }, [localStorage.getItem("value")]);
 
   const [incrDisabled, setIncrDisabled] = useState(false);
   const [resetDisabled, setResetDisabled] = useState(false);
 
   let showMessage: string | number;
 
-  const isLocalSettedValue = localStorage.getItem("settedValue");
+  const isLocalStaticValue = localStorage.getItem("staticValue");
 
   useEffect(() => {
     setIncrDisabled(false);
@@ -34,13 +37,13 @@ export const Counter: React.FC<CounterPropsType> = (props) => {
       setResetDisabled(true);
     }
 
-    if (value === maxValue) {
+    if (currentValue === maxValue) {
       setIncrDisabled(true);
     }
-  }, [value, preMessage]);
+  }, [currentValue, preMessage]);
 
-  if (isLocalSettedValue !== null) {
-    showMessage = value;
+  if (isLocalStaticValue !== null) {
+    showMessage = currentValue;
   } else if (preMessage) {
     showMessage = preMessage;
   } else {
@@ -48,15 +51,11 @@ export const Counter: React.FC<CounterPropsType> = (props) => {
   }
 
   const onClickIncrHandler = () => {
-    setValue(Number(value) + 1);
+    setCurrentValue(Number(currentValue) + 1);
   };
 
   const onClickResetHandler = () => {
-    // setValue(staticValueRef.current as number);
-
-    const localSettedValue = localStorage.getItem("settedValue");
-
-    localSettedValue && setValue(JSON.parse(localSettedValue));
+    isLocalStaticValue && setCurrentValue(JSON.parse(isLocalStaticValue));
   };
 
   const classesMessage =
